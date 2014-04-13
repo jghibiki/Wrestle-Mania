@@ -6,19 +6,44 @@ init:
     image coach streach = "Assets/woman3.rpy"
     image coach angry = "Assets/angry.png"
     image black = "#000"
+    image player = "Assets/player.png"
+    image opponent = "Assets/opponent.png"
+    image opponent evil = "Assets/opponent_evil.png"
+    image opponent crying = "Assets/opponent_crying.png"
+    image opponent friendly = "Assets/opponent_friendly.png"
+    image flames1 = "Assets/flames.png"
+    image flames2 = "Assets/flames2.png"
+    image judge1 = "Assets/judge1.png"
+    image judge2 = "Assets/judge2.png"
 
+    python:
+        special = False
+        charge = False
+        dodge = False
+        feign = False
+        lunge = False
+        
+        
+        playerh = 10
+        playerx = 0
+        playery = 5
+
+        opponeneth = 10
+        opponentx = 9
+        oppenenty = 5
 # Declare images below this line, using the image statement.
 # eg. image eileen happy = "eileen_happy.png"
 # Declare characters used by this game.
 define e = Character('Clarissa Chun', color="#c8ffc8")
+define o = Character('Wrestler', color="#00ffff")
+define d = Character('Devil', color="#00ffff")
 
 
-# The game starts here.
+ The game starts here.
 label start:
     $log = Logger("storyLoger.log")
     $char = Char()
     $time = Time()
-   
 
     scene wrestling room with fade 
     pause 0.1
@@ -132,6 +157,8 @@ screen sim_gui:
         textbutton "Weight +" action Return(("stat", "whe"))
         textbutton "Karma +" action Return(("stat","kar")) 
         textbutton "Go to bed" action Return("sleep")
+        if _config.developer == True:
+            textbutton "Game" action Jump("game_init")
         
 screen how_long:
     vbox:
@@ -150,7 +177,7 @@ screen time:
         xpos 0.76
         ypos 10
         vbox:        
-            text "Day: " + str(time.getCurrentDay()) color "#000"
+            text "Day: " + str(time.getCurrentDay()) + " of "+ str(time.days_to_go) color "#000"
             hbox:
                 text "Time: " color "#000"
                 if time.getTime() == 0:

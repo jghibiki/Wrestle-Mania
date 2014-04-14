@@ -3,7 +3,7 @@ init:
     image wrestling room = "Assets/wrestling-room.jpg"
     image coach = "Assets/woman.png"
     image coach flex = "Assets/woman2.png"
-    image coach streach = "Assets/woman3.rpy"
+    image coach stretch = "Assets/woman3.png"
     image coach angry = "Assets/angry.png"
     image black = "#000"
     image player = "Assets/player.png"
@@ -13,8 +13,13 @@ init:
     image opponent friendly = "Assets/opponent_friendly.png"
     image flames1 = "Assets/flames.png"
     image flames2 = "Assets/flames2.png"
-    image judge1 = "Assets/judge1.png"
-    image judge2 = "Assets/judge2.png"
+    image judge1 = "Assets/judge1.jpg"
+    image judge2 = "Assets/judge2.jpg"
+    image hell = "Assets/hell.png"
+    image men_dead_lock = "Assets/men_dead_lock.jpg"
+    image reality = "Assets/P140_20.jpg"
+    image reality2 = "Assets/woman4.jpg"
+    image crazy = "Assets/images.jpg"
 
     python:
         special = False
@@ -28,9 +33,12 @@ init:
         playerx = 0
         playery = 5
 
-        opponeneth = 10
-        opponentx = 9
-        oppenenty = 5
+        oph = 10
+        opx = 9
+        opy = 5
+
+        #transition
+        pokemon = ImageDissolve("Assets/transition.png", 3, alpha=True)
 # Declare images below this line, using the image statement.
 # eg. image eileen happy = "eileen_happy.png"
 # Declare characters used by this game.
@@ -39,10 +47,11 @@ define o = Character('Wrestler', color="#00ffff")
 define d = Character('Devil', color="#00ffff")
 
 
- The game starts here.
+#The game starts here.
 label start:
     $log = Logger("storyLoger.log")
     $char = Char()
+    $op = Char()
     $time = Time()
 
     scene wrestling room with fade 
@@ -83,10 +92,12 @@ label sim:
     
     if action == "sleep":
         if time.isEndOfDay():
-            show black Dissolve(4)
+            show black with Dissolve(4)
             "You exhaustedly flop down on your mat in the hall and fall asleep."
-            $time.incDay()
-            jump sim
+            if time.incDay():
+                jump sim
+            else:
+                jump game_init
         else:
             e "You can't run away so easily fool! Get back to work!"      
             jump sim
@@ -154,11 +165,10 @@ screen sim_gui:
         textbutton "Strength +" action Return(("stat","str"))
         textbutton "Speed +" action Return(("stat", "spd")) 
         textbutton "Cunning +" action Return(("stat", "cun")) 
-        textbutton "Weight +" action Return(("stat", "whe"))
         textbutton "Karma +" action Return(("stat","kar")) 
         textbutton "Go to bed" action Return("sleep")
-        if _config.developer == True:
-            textbutton "Game" action Jump("game_init")
+        if _config.developer == True or time.getCurrentDay() == time.days_to_go:
+            textbutton "Prepare for fight!" action Jump("game_init")
         
 screen how_long:
     vbox:
